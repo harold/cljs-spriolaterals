@@ -1,0 +1,3 @@
+{:main spirolaterals.core
+ :optimizations :advanced
+ :infer-externs true}
