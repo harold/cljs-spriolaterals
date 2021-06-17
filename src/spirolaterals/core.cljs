@@ -65,23 +65,24 @@
                        :on-change #(do (swap! state* assoc :angle (event->float-v %))
                                        (go!))}]]
          [:td (:angle @state*)]]]]]
-     [:div.graphics
-      (let [px-w 960
-            [min-x max-x min-y max-y] (:bbox @state*)
-            [w h] [(- max-x min-x) (- max-y min-y)]
-            aspect (/ w h)
-            [full-w full-h] [(- px-w 20) (- (/ px-w aspect) 20)]
-            points (->> (:points @state*)
-                        (map (fn [[x y]]
-                               [(+ 10 (* full-w (/ (- x min-x) w))) (+ 10 (* full-h (/ (- y min-y) h)))])))]
-        [:svg#pic {:xmlns "http://www.w3.org/2000/svg"
-                   :width px-w
-                   :height (/ px-w aspect)}
-         [:polyline {:points (s/join " " (map #(s/join "," %) points))
-                     :stroke-width 2 :stroke :#222 :fill :none
-                     :stroke-linecap :round :stroke-linejoin :round}]])
-      ;; [:div [:pre (with-out-str (pprint/pprint @state*))]]
-      ]]))
+     (when-not (empty? (:points @state*))
+       [:div.graphics
+        (let [px-w 960
+              [min-x max-x min-y max-y] (:bbox @state*)
+              [w h] [(- max-x min-x) (- max-y min-y)]
+              aspect (/ w h)
+              [full-w full-h] [(- px-w 20) (- (/ px-w aspect) 20)]
+              points (->> (:points @state*)
+                          (map (fn [[x y]]
+                                 [(+ 10 (* full-w (/ (- x min-x) w))) (+ 10 (* full-h (/ (- y min-y) h)))])))]
+          [:svg#pic {:xmlns "http://www.w3.org/2000/svg"
+                     :width px-w
+                     :height (/ px-w aspect)}
+           [:polyline {:points (s/join " " (map #(s/join "," %) points))
+                       :stroke-width 2 :stroke :#222 :fill :none
+                       :stroke-linecap :round :stroke-linejoin :round}]])
+        ;; [:div [:pre (with-out-str (pprint/pprint @state*))]]
+        ])]))
 
 (reagent-dom/render [page] (js/document.getElementById "app"))
 
