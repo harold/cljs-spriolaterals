@@ -27,7 +27,7 @@
           [min-x max-x min-y max-y] [(min min-x new-x) (max max-x new-x)
                                      (min min-y new-y) (max max-y new-y)]
           points (conj points [new-x new-y])
-          theta (+ theta (* (:angle @state*) Math/PI (/ 1 180.0)))
+          theta (+ theta (* (- 180 (:angle @state*)) Math/PI (/ 1 180.0)))
           steps (if (zero? (dec steps))
                   (:steps @state*)
                   (dec steps))]
@@ -37,7 +37,7 @@
                    (zero? (mod i (:steps @state*)))
                    (zero? (mod (* (quot i (:steps @state*))
                                   (:steps @state*)
-                                  (:angle @state*)) 360))))
+                                  (- 180 (:angle @state*))) 360))))
         (swap! state* assoc
                :points (if (> i 360) points (conj points [0 0]))
                :bbox [min-x max-x min-y max-y])
